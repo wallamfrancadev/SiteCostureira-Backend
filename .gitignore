@@ -1,0 +1,49 @@
+# ========================================
+# Segurança e Credenciais (CRÍTICO)
+# ========================================
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+
+# ========================================
+# Se o backend for Node.js (Express/Nest)
+# ========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+dist/
+build/
+.nyc_output/
+
+# ========================================
+# Se o backend for Python (Django/FastAPI)
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.pytest_cache/
+*.sqlite3
+db.sqlite3
+
+# ========================================
+# Se o backend for Java/Spring
+# ========================================
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+
+# ========================================
+# IDEs e Sistema Operacional
+# ========================================
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
