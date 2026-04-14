@@ -26,6 +26,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include('produtos.urls')),
     path('api/', include('siteinfo.urls')),
+    path('api/', include('usuarios.urls')),
+    path('api/', include('pedidos.urls')),
 ]
 
 # Servir arquivos de media em desenvolvimento
