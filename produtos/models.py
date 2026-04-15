@@ -28,6 +28,10 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True, verbose_name="Ativo")
+    peso = models.DecimalField(max_digits=6, decimal_places=3, default=0.3, verbose_name="Peso (kg)")
+    comprimento = models.DecimalField(max_digits=6, decimal_places=1, default=20.0, verbose_name="Comprimento (cm)")
+    largura = models.DecimalField(max_digits=6, decimal_places=1, default=15.0, verbose_name="Largura (cm)")
+    altura = models.DecimalField(max_digits=6, decimal_places=1, default=5.0, verbose_name="Altura (cm)")
 
     class Meta:
         verbose_name = "Produto"

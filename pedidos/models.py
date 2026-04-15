@@ -19,11 +19,18 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Informações de entrega
+    # Endereço de entrega
     shipping_address = models.CharField(max_length=255, blank=True, verbose_name="Endereço de Entrega")
+    shipping_number = models.CharField(max_length=20, blank=True, verbose_name="Número")
     shipping_city = models.CharField(max_length=100, blank=True, verbose_name="Cidade")
     shipping_state = models.CharField(max_length=2, blank=True, verbose_name="Estado")
     shipping_cep = models.CharField(max_length=9, blank=True, verbose_name="CEP")
+
+    # Frete selecionado
+    frete_valor = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name="Valor do Frete")
+    frete_transportadora = models.CharField(max_length=100, blank=True, verbose_name="Transportadora")
+    frete_servico = models.CharField(max_length=100, blank=True, verbose_name="Serviço de Frete")
+    frete_prazo_dias = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="Prazo (dias)")
 
     class Meta:
         verbose_name = "Pedido"

@@ -25,7 +25,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'id', 'total', 'status', 'status_display',
-            'shipping_address', 'shipping_city', 'shipping_state', 'shipping_cep',
+            'shipping_address', 'shipping_number', 'shipping_city', 'shipping_state', 'shipping_cep',
+            'frete_valor', 'frete_transportadora', 'frete_servico', 'frete_prazo_dias',
             'items', 'created_at', 'updated_at',
         )
         read_only_fields = ('total', 'status', 'created_at', 'updated_at')
@@ -33,10 +34,15 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderCreateSerializer(serializers.Serializer):
     items = OrderItemCreateSerializer(many=True, min_length=1)
-    shipping_address = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    shipping_city = serializers.CharField(max_length=100, required=False, allow_blank=True)
-    shipping_state = serializers.CharField(max_length=2, required=False, allow_blank=True)
-    shipping_cep = serializers.CharField(max_length=9, required=False, allow_blank=True)
+    shipping_address = serializers.CharField(max_length=255, required=False, allow_blank=True, default='')
+    shipping_number = serializers.CharField(max_length=20, required=False, allow_blank=True, default='')
+    shipping_city = serializers.CharField(max_length=100, required=False, allow_blank=True, default='')
+    shipping_state = serializers.CharField(max_length=2, required=False, allow_blank=True, default='')
+    shipping_cep = serializers.CharField(max_length=9, required=False, allow_blank=True, default='')
+    frete_valor = serializers.DecimalField(max_digits=8, decimal_places=2, required=False, default=0)
+    frete_transportadora = serializers.CharField(max_length=100, required=False, allow_blank=True, default='')
+    frete_servico = serializers.CharField(max_length=100, required=False, allow_blank=True, default='')
+    frete_prazo_dias = serializers.IntegerField(required=False, allow_null=True, default=None)
 
     def validate_items(self, items):
         product_ids = [i['product_id'] for i in items]
@@ -47,7 +53,6 @@ class OrderCreateSerializer(serializers.Serializer):
         if missing:
             raise serializers.ValidationError(f"Produtos não encontrados ou inativos: {missing}")
 
-        # Verificar estoque
         product_map = {p.id: p for p in products}
         for item in items:
             product = product_map[item['product_id']]
@@ -65,10 +70,12 @@ class OrderCreateSerializer(serializers.Serializer):
         product_ids = [i['product_id'] for i in items_data]
         product_map = {p.id: p for p in Product.objects.filter(id__in=product_ids)}
 
-        total = sum(
+        subtotal_itens = sum(
             product_map[i['product_id']].price * i['quantity']
             for i in items_data
         )
+        frete_valor = validated_data.get('frete_valor', 0)
+        total = subtotal_itens + frete_valor
 
         order = Order.objects.create(user=user, total=total, **validated_data)
 
@@ -80,7 +87,6 @@ class OrderCreateSerializer(serializers.Serializer):
                 quantity=item['quantity'],
                 subtotal=product.price * item['quantity'],
             )
-            # Decrementar estoque
             product.stock -= item['quantity']
             product.save(update_fields=['stock'])
 

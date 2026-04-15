@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/', include('siteinfo.urls')),
     path('api/', include('usuarios.urls')),
     path('api/', include('pedidos.urls')),
+    path('api/', include('pagamentos.urls')),
+    path('api/', include('frete.urls')),
 ]
 
 # Servir arquivos de media em desenvolvimento

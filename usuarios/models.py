@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=20, blank=True, verbose_name="Telefone")
     address = models.CharField(max_length=255, blank=True, verbose_name="Endereço")
+    number = models.CharField(max_length=20, blank=True, verbose_name="Número")
     city = models.CharField(max_length=100, blank=True, verbose_name="Cidade")
     state = models.CharField(max_length=2, blank=True, verbose_name="Estado")
     cep = models.CharField(max_length=9, blank=True, verbose_name="CEP")

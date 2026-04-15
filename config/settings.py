@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'pedidos',
     'usuarios',
     'siteinfo',
+    'pagamentos',
+    'frete',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +121,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    'EXCEPTION_HANDLER': 'pagamentos.exceptions.custom_exception_handler',
 }
 
 # JWT Settings
@@ -144,3 +147,20 @@ _cors_origins = os.environ.get(
 )
 CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(',') if o.strip()]
 CORS_ALLOW_CREDENTIALS = True
+
+# ---------------------------------------------------------------------------
+# Mercado Pago — PIX + Cartão de crédito
+# ---------------------------------------------------------------------------
+MP_ACCESS_TOKEN = os.environ.get('MP_ACCESS_TOKEN', '')
+MP_WEBHOOK_SECRET = os.environ.get('MP_WEBHOOK_SECRET', '')
+MP_DEV_MODE = os.environ.get('MP_DEV_MODE', 'False') == 'True'
+
+# ---------------------------------------------------------------------------
+# Melhor Envio — cálculo de frete
+# ---------------------------------------------------------------------------
+MELHOR_ENVIO_TOKEN = os.environ.get('MELHOR_ENVIO_TOKEN', '')
+ORIGIN_POSTAL_CODE = os.environ.get('ORIGIN_POSTAL_CODE', '')
+ORIGIN_NUMBER = os.environ.get('ORIGIN_NUMBER', '')
+DIAS_ADICIONAIS_PRODUCAO = int(os.environ.get('DIAS_ADICIONAIS_PRODUCAO', '2'))
+MELHOR_ENVIO_SANDBOX = os.environ.get('MELHOR_ENVIO_SANDBOX', 'True') == 'True'
+ME_DEV_MODE = os.environ.get('ME_DEV_MODE', 'False') == 'True'
